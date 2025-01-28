@@ -1,0 +1,24 @@
+<div class="container my-4">
+  <button class="btn btn-primary"
+          (click)="setFlagModal()">
+    {{flagModal ? 'Cerrar' : 'Crear usuario'}}
+  </button>
+
+  <div class="row">
+    @if (flagModal) {
+      <div class="col">
+      <h3>Usuario</h3>
+      <user-form (newUserEmitter)="addUser($event)"
+                [user]="selectedUser"></user-form>
+    </div>
+    }
+
+    <div class="col">
+      <h3>{{ tittle }}</h3>
+      <user [users]="users"
+          (idUserEmitter)="removeUser($event)"
+          (selectedUserEmitter)="setSelectedUser($event)"></user>
+    </div>
+  </div>
+</div>
+
