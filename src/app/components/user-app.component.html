@@ -1,23 +1,4 @@
+<navbar [users]="users"></navbar>
 <div class="container my-4">
-  <button class="btn btn-primary"
-          (click)="setFlagModal()">
-    Crear usuario
-  </button>
-
-  <div class="row">
-    <div class="col">
-      <h3>{{ tittle }}</h3>
-      <user [users]="users"
-          (idUserEmitter)="removeUser($event)"
-          (selectedUserEmitter)="setSelectedUser($event)"></user>
-    </div>
-  </div>
+  <router-outlet></router-outlet>
 </div>
- @if (flagModal) {
-  <div class="abrir-modal animacion fadeIn">
-    <user-form (newUserEmitter)="addUser($event)"
-                [user]="selectedUser"
-                (modalEmitter)="setFlagModal()"></user-form>
-  </div>
-
-    }
