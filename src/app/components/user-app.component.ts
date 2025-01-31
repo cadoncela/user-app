@@ -33,10 +33,18 @@ export class UserAppComponent implements OnInit {
     //se suscribe a los metodos, no se están ejecutando.
     this.addUser();
     this.removeUser();
+    this.findUserById();
   }
 
   findAll(): void{
     this.service.findAll().subscribe( users => this.users = users );
+  }
+
+  findUserById(){
+    this.sharingService.findUserEmitter.subscribe( id => {
+      const user = this.users.find(user => user.id == id);
+      this.sharingService.selectUserEmitter.emit(user);
+    });
   }
 
   addUser(): void{
