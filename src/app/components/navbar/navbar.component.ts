@@ -10,6 +10,6 @@ import { User } from '../../models/user';
 })
 export class NavbarComponent {
 
+  //La pagina user-app.component.html envia el valor de los users y se recibe en la siguiente variable.
   @Input() users: User[] = [];
-
 }

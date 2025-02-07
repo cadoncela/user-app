@@ -7,10 +7,12 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
+          <!--router-link va la ruta que está en app.routes-->
+          <!--state para enviar datos al componente-->
           <a class="nav-link active"
               aria-current="page"
               [routerLink]="['/users']"
-              [state]="{ users: users }">Home</a>
+              [state]="{ users }">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/users/create']">Crear Usuario</a>

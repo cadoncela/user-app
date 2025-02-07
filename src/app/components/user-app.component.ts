@@ -50,20 +50,28 @@ export class UserAppComponent implements OnInit {
   addUser(): void{
     this.sharingService.newUserEmitter.subscribe( user => {
       if (user.id > 0){
-            this.users = this.users.map( u => (u.id == user.id) ? { ... user} : u);
-          }else {
-            //se clona el arreglo de usuarios y se agrega el nuevo usuario
-            this.users = [... this.users, { ...user, id: new Date().getTime() }];
-          }
+        //se hace la actualizacion y se actualiza la lista de usuarios con el usuario actualizado.
+        this.service.update(user).subscribe( userUpdated => {
+          this.users = this.users.map( u => (u.id == userUpdated.id) ? { ... userUpdated} : u);
 
-          //Se hace el redirect hacia el listado de usuarios
-          this.router.navigate(['/users'], { state: { users: this.users } });
-
-          Swal.fire({
-            title: "Guardado!",
-            text: "Usuario guardado correctamente!",
-            icon: "success"
-          });
+          //Se hace el redirect hacia el listado de usuarios. Se le pasa al atributo state los usuarios actualizados
+          this.router.navigate(['/users'], { state: { users: this.users }});
+        });
+      }else {
+        this.service.create(user).subscribe( userNew => {
+        //se clona el arreglo de usuarios y se agrega el usuario creado
+        //this.users = [... this.users, { ...userNew }];
+        this.service.findAll().subscribe( users => this.users = users );
+        console.log('users: ' + this.users.length);
+        });
+        //Se hace el redirect hacia el listado de usuarios. Se le pasa al atributo state los usuarios actualizados
+        this.router.navigate(['/users']);
+      }
+      Swal.fire({
+        title: "Guardado!",
+        text: "Usuario guardado correctamente!",
+        icon: "success"
+      });
     });
   }
 
@@ -79,21 +87,22 @@ export class UserAppComponent implements OnInit {
         confirmButtonText: "Eliminar!"
       }).then((result) => {
         if (result.isConfirmed) {
-          this.users = this.users.filter(user => user.id != id);
-
-          // Se hace un redireccionamiento hacia una pagina distinta
-          // y luego(then) se regresa a la pagina principal para que quede refrescada la pagina
-          this.router.navigate(['/users/create'], { skipLocationChange: true}).then(() => {
-            this.router.navigate(['/users'], { state: { users: this.users } })
+          this.service.delete(id).subscribe ( () => {
+            this.users = this.users.filter(user => user.id != id);
+            // Se hace un redireccionamiento hacia una pagina distinta
+            // y luego(then) se regresa a la pagina principal para que quede refrescada la pagina
+            this.router.navigate(['/users/create'], { skipLocationChange: true}).then(() => {
+              //Se hace el redirect hacia el listado de usuarios. Se le pasa al atributo state los usuarios actualizados
+              this.router.navigate(['/users'], { state: { users: this.users }});
+            });
           });
           Swal.fire({
-            title: "Eliminado!",
-            text: "Usuario eliminado.",
-            icon: "success"
+                title: "Eliminado!",
+                text: "Usuario eliminado.",
+                icon: "success"
           });
-        }
+        };
       });
     });
-
   }
 }
